@@ -1,0 +1,3 @@
+module Langulator
+  # Your code goes here...
+end
