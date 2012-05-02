@@ -29,14 +29,15 @@ module Langulator
       dictionary
     end
 
-    def insert(language, translations, dictionary, path = [])
+    def insert(language, translations, dictionary)
       dictionary.dup.each do |key, value|
         if value.is_a?(Hash)
-          insert(language, translations[key], dictionary[key], path + [key])
+          insert(language, (translations || {})[key], value)
         else
           dictionary[language] = translations
         end
       end
+      dictionary
     end
 
   end

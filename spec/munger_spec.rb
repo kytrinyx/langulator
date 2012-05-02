@@ -53,6 +53,31 @@ describe Langulator::Munger do
     }
   end
 
+  let(:empty_target) do
+    {
+      :game => {
+        :rock => {
+          :english => "rock",
+          :norwegian => nil
+        },
+        :paper => {
+          :english => "paper",
+          :norwegian => nil
+        },
+        :scissors => {
+          :english => "scissors",
+          :norwegian => nil
+        },
+        :other => {
+          :deeply => {
+            :english => "nested",
+            :norwegian => nil
+          }
+        }
+      }
+    }
+  end
+
   context "partial munges" do
     subject { Langulator::Munger.new }
 
@@ -62,6 +87,10 @@ describe Langulator::Munger do
 
     it "inserts an alternate language" do
       subject.insert(:french, french, english_remapped).should eq(combined)
+    end
+
+    it "inserts an empty alternate language" do
+      subject.insert(:norwegian, {}, english_remapped).should eq(empty_target)
     end
   end
 
