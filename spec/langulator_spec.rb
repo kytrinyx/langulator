@@ -28,6 +28,6 @@ describe Langulator do
   end
 
   it "loads and munges" do
-    Langulator.compile(options).should eq(combined)
+    Langulator.munge(options).should eq(combined)
   end
 end
