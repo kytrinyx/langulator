@@ -4,7 +4,7 @@ require 'langulator'
 describe Langulator do
   let(:options) { {:base_path => 'spec/fixtures/**/', :origin => 'english', :alternates => ['norsk', 'francais']} }
 
-  let(:combined) do
+  let(:aggregate_incomplete) do
     {
       "spec/fixtures/" => {
         "food" => {
@@ -28,6 +28,6 @@ describe Langulator do
   end
 
   it "loads and munges" do
-    Langulator.munge(options).should eq(combined)
+    Langulator.munge(options).should eq(aggregate_incomplete)
   end
 end
