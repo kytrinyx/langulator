@@ -15,7 +15,7 @@ module Langulator
 
     def compile(options)
       filename = options[:to]
-      translations = compile(options)
+      translations = munge(options)
       write filename, translations
     end
 
@@ -23,7 +23,9 @@ module Langulator
       Untangler.new(aggregate, options).untangle
     end
 
-    def decompile(aggregate, options)
+    def decompile(options)
+      puts options[:file].inspect
+      aggregate = YAML.load(File.read(options[:file]))
       translations = untangle(aggregate, options)
 
       translations.each do |language, data|
