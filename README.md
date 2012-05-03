@@ -32,6 +32,8 @@ Or install it yourself as:
 
 ## Usage
 
+### Compile
+
 Given that you've written the original translations in English and also need French and German versions, and that you have multiple paths that contain i18n yml files named per the convention `<iso-language-code>.yml`, then this will give you a single output file where each key is listed with the translations immediately below it.
 
 If you have partial translations in the target languages, these will be included.
@@ -44,51 +46,105 @@ It handles arbitrarily deep nestings.
 
 This first version doesn't handle yml files that are namespaced by the language, but I anticipate needing it very soon.
 
-Also, this first version doesn't actually decompile the finished product. Come back tomorrow for that one.
-
-e.g.
+    Langulator.compile(:language => 'en', :alternates => ['fr', 'no'], :base_path => '**/i18n/', :to => '/tmp/translations.yml')
 
 Input:
 
-    # en.yml
+    # config/i18n/en.yml
     ---
     food:
       breakfast: Eggs
       lunch: Sandwich
       dinner:
         main_course: Steak
-        desert: Chocolate pudding
+        desert: Chocolate mousse
 
-    # fr.yml
+    # config/i18n/fr.yml
     ---
     food:
       breakfast: Des oeufs
     thank_you: Merci
 
-    # no de.yml file
-
-    Langulator.write(:language => 'en', :alternates => ['fr', 'de'], :base_path => '**/i18n/', :to => '/tmp/translations.yml')
+    # missing no.yml file
 
 Outputs:
 
+      # tmp/translations.yml
+      config/i18n/:
+        food:
+          breakfast:
+            en: Eggs
+            fr: Des oeufs
+            no: 
+          lunch:
+            en: Sandwich
+            fr: 
+            no: 
+          dinner:
+            main_course:
+              en: Steak
+              fr: 
+              no: 
+            desert:
+              en: Chocolate pudding
+              fr: 
+              no: 
+
+
+### Decompile
+
+    Langulator.decompile(:file => './tmp/translations.yml', :languages => ['en', 'fr', 'no'])
+
+Input:
+
+      config/i18n/:
+        food:
+          breakfast:
+            en: Eggs
+            fr: Des oeufs
+            no: Egg
+          lunch:
+            en: Sandwich
+            fr: Sandwich
+            no: Ostesmørbrød
+          dinner:
+            main_course:
+              en: Steak
+              fr: Biffteak
+              no: Steak
+            desert:
+              en: Chocolate mousse
+              fr: Mousse au chocolat
+              no: Sjokolademousse
+
+Output:
+
+    # config/i18n/en.yml
+    ---
     food:
-      breakfast:
-        en: Eggs
-        fr: Des oeufs
-        de: 
-      lunch:
-        en: Sandwich
-        fr: 
-        de: 
+      breakfast: Eggs
+      lunch: Sandwich
       dinner:
-        main_course:
-          en: Steak
-          fr: 
-          de: 
-        desert:
-          en: Chocolate pudding
-          fr: 
-          de: 
+        main_course: Steak
+        desert: Chocolate mousse
+
+    # config/i18n/fr.yml
+    ---
+    food:
+      breakfast: Des oeufs
+      lunch: Sandwich
+      dinner:
+        main_course: Biffteak
+        desert: Mousse au chocolat
+
+    # config/i18n/no.yml
+    ---
+    food:
+      breakfast: Egg
+      lunch: Sandwich
+      dinner:
+        main_course: Steak
+        desert: Sjokolademousse
 
 ## Contributing
 
