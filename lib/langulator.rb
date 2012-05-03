@@ -1,3 +1,5 @@
+# encoding: utf-8
+require 'yaml'
 require 'langulator/loader'
 require 'langulator/munger'
 
@@ -11,7 +13,7 @@ module Langulator
 
   def self.write(options)
     translations = compile(options)
-    File.open(options[:to], 'w') do |file|
+    File.open(options[:to], 'w:utf-8') do |file|
       file.write translations.to_yaml
     end
   end
