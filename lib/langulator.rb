@@ -2,6 +2,7 @@
 require 'yaml'
 require 'langulator/loader'
 require 'langulator/munger'
+require 'langulator/untangler'
 
 module Langulator
   class << self
@@ -13,9 +14,30 @@ module Langulator
     end
 
     def compile(options)
+      filename = options[:to]
       translations = compile(options)
-      File.open(options[:to], 'w:utf-8') do |file|
-        file.write translations.to_yaml
+      write filename, translations
+    end
+
+    def untangle(aggregate, options)
+      Untangler.new(aggregate, options).untangle
+    end
+
+    def decompile(aggregate, options)
+      translations = untangle(aggregate, options)
+
+      translations.each do |language, data|
+        data.each do |path, translation|
+          filename = "#{path}#{language}.yml"
+          write filename, translation
+        end
+      end
+    end
+
+    private
+    def write(filename, content)
+      File.open(filename, 'w:utf-8') do |file|
+        file.write content.to_yaml
       end
     end
   end
