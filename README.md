@@ -4,6 +4,16 @@ Manage your i18n.
 
 Or rather: compile it into a single managable file and give it to the translator, so you don't have to deal with it.
 
+For example, given that you've written the original translations in English and also need French and Norwegian versions, and that you have multiple paths that contain i18n yml files named per the convention `<iso-language-code>.yml` (don't get me started on the Norwegian iso language code), then this will give you a single output file where each key is listed with the translations immediately below it.
+
+If you have partial translations in the target languages, these will be included.
+
+Any extraneous translations (i.e. keys that may have been in use previously but are no longer referenced in the original language) will be discarded.
+
+Any missing translations will be given keys with an empty spot, ready for translation.
+
+It handles arbitrarily deep nestings.
+
 ## Caveats
 
 If you need something other than US-ASCII, you may want to consider using ruby 1.9.3.
@@ -30,23 +40,20 @@ Or install it yourself as:
 
     $ gem install langulator
 
+### Compile
+
+* `decompile` from an aggregate file (`separate` into final data structures), write to files
+
+    load -> combine into aggregate -> write :to => file
+    load :from => file -> separate from aggregate -> write
+
 ## Usage
 
 ### Compile
 
-Given that you've written the original translations in English and also need French and German versions, and that you have multiple paths that contain i18n yml files named per the convention `<iso-language-code>.yml`, then this will give you a single output file where each key is listed with the translations immediately below it.
+Compile from `.yml` files at given (wildcard) paths into an aggregate data structure, and write this to a file.
 
-If you have partial translations in the target languages, these will be included.
-
-Any extraneous translations (i.e. keys that may have been in use previously but are no longer referenced in the original language) will be discarded.
-
-Any missing translations will be given keys with an empty spot, ready for translation.
-
-It handles arbitrarily deep nestings.
-
-This first version doesn't handle yml files that are namespaced by the language, but I anticipate needing it very soon.
-
-    Langulator.compile(:language => 'en', :alternates => ['fr', 'no'], :base_path => '**/i18n/', :to => '/tmp/translations.yml')
+    Langulator.compile(:original => 'en', :alternates => ['fr', 'no'], :base_path => '**/i18n/', :to => '/tmp/translations.yml')
 
 Input:
 
@@ -92,6 +99,8 @@ Outputs:
 
 
 ### Decompile
+
+Decompile from a single aggregate `.yml` file, writing the separate translation files to their original locations.
 
     Langulator.decompile(:file => './tmp/translations.yml', :languages => ['en', 'fr', 'no'])
 
@@ -145,6 +154,16 @@ Output:
       dinner:
         main_course: Steak
         desert: Sjokolademousse
+
+## TODO
+
+* refactor to use a core `Aggregate` class rather than the rather arbitrary classes currently in use.
+* handle yml files that are namespaced by the language, e.g.
+```
+---
+en:
+  stuff: "whatever"
+```
 
 ## Contributing
 
