@@ -1,7 +1,7 @@
 # encoding: utf-8
-require 'langulator/untangler'
+require 'langulator/aggregate'
 
-describe Langulator::Untangler do
+describe Langulator::Aggregate do
   let(:aggregate) do
     {
       :game => {
@@ -50,7 +50,7 @@ describe Langulator::Untangler do
   end
 
   context "with tangled data" do
-    subject { Langulator::Untangler.new(aggregate, :languages => [:english, :french]) }
+    subject { Langulator::Aggregate.new(aggregate, :languages => [:english, :french]) }
 
     it 'extracts English' do
       input = {:rock => {:english => "rock"}, :paper => {:english => "paper"}}

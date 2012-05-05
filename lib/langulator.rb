@@ -2,7 +2,7 @@
 require 'yaml'
 require 'langulator/loader'
 require 'langulator/munger'
-require 'langulator/untangler'
+require 'langulator/aggregate'
 
 module Langulator
   class << self
@@ -20,7 +20,7 @@ module Langulator
     end
 
     def untangle(aggregate, options)
-      Untangler.new(aggregate, options).untangle
+      Aggregate.new(aggregate, options).untangle
     end
 
     def decompile(options)

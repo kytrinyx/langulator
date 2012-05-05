@@ -1,5 +1,5 @@
 module Langulator
-  class Untangler
+  class Aggregate
     attr_reader :aggregate, :languages
     def initialize(aggregate, options = {})
       @aggregate = aggregate
