@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'yaml'
 require 'langulator/loader'
 
 describe Langulator::Loader do
