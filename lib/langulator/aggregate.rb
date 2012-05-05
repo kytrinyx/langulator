@@ -8,10 +8,13 @@ module Langulator
       end
     end
 
-    attr_reader :aggregate, :languages
+    attr_reader :aggregate, :languages, :source_language, :target_languages
     def initialize(options = {})
       @aggregate = options[:aggregate_translations]
-      @languages = options[:languages]
+      @individual_translations = options[:individual_translations]
+      @source_language = options[:source_language]
+      @target_languages = Array(options[:target_languages])
+      @languages = options[:languages] || [source_language] + target_languages
     end
 
     def individual_translations

@@ -3,6 +3,24 @@ require 'langulator/aggregate'
 
 describe Langulator::Aggregate do
 
+  describe "combining individual translations" do
+    let(:compile_options) do
+      {
+        :source_language => :klingon,
+        :target_languages => :lolcode,
+        :individual_translations => {:klingon => klingon, :lolcode => lolcode}
+      }
+    end
+
+    subject { Langulator::Aggregate.new(compile_options) }
+
+    its(:source_language) { should eq(:klingon) }
+    its(:target_languages) { should eq([:lolcode]) }
+    its(:languages) { should eq([:klingon, :lolcode]) }
+    its(:individual_translations) { should eq({:klingon => klingon, :lolcode => lolcode}) }
+    xit(:aggregate) { should eq(aggregate) }
+  end
+
   describe "de-aggregating translations" do
     subject { Langulator::Aggregate.new(:languages => [:english]) }
 
