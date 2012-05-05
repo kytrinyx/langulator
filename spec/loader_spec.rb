@@ -41,10 +41,6 @@ describe Langulator::Loader do
     }
   end
 
-  subject { Langulator::Loader.new(:base_path => 'spec/fixtures/**/', :origin => 'english', :alternates => ['norsk', 'francais']) }
-
-  its(:paths) { should eq(['spec/fixtures/', 'spec/fixtures/lang/']) }
-
-  its(:source_translations) { should eq(english) }
-  its(:destination_translations) { should eq({'norsk' => norwegian, 'francais' => french}) }
+  subject { Langulator::Loader.new(:base_path => 'spec/fixtures/**/', :languages => ['english', 'norsk', 'francais']) }
+  its(:translations) { should eq({'english' => english, 'norsk' => norwegian, 'francais' => french}) }
 end

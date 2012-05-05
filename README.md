@@ -49,7 +49,7 @@ Or install it yourself as:
 * combine into aggregated translations
 * write to an aggregate file
 
-    Langulator.compile(:original => 'en', :alternates => ['fr', 'no'], :base_path => '**/i18n/', :to => '/tmp/translations.yml')
+    Langulator.compile(:source_language => 'en', :target_languages => ['fr', 'no'], :base_path => '**/i18n/', :to => '/tmp/translations.yml')
 
 Input:
 

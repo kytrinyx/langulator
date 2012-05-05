@@ -1,24 +1,23 @@
 module Langulator
   class Loader
 
-    attr_reader :base_path, :origin, :alternates
+    attr_reader :base_path, :languages
     def initialize(options = {})
       @base_path = options[:base_path]
-      @origin = options[:origin]
-      @alternates = options[:alternates]
+      @languages = options[:languages]
     end
 
     def paths
-      @paths ||= Dir.glob("#{base_path}#{origin}.yml").map {|file| file.gsub("#{origin}.yml", '') }.sort
+      unless @paths
+        filename = "#{languages.first}.yml"
+        @paths = Dir.glob("#{base_path}#{filename}").map {|file| file.gsub(filename, '') }.sort
+      end
+      @paths
     end
 
-    def source_translations
-      translations = load_translations(origin)
-    end
-
-    def destination_translations
+    def translations
       translations = {}
-      alternates.each do |language|
+      languages.each do |language|
         translations[language] = load_translations(language)
       end
       translations
