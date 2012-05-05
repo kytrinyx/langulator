@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'langulator/aggregate'
 
 describe Langulator::Aggregate do
@@ -28,14 +27,6 @@ describe Langulator::Aggregate do
   let(:lolcode) { {"spec/fixtures/" => {"words" => {"affirmative" => "YA RLY", "negative" => "NO WAI", "hello" => "O HAI"}}} }
 
   describe "combining individual translations" do
-    let(:compile_options) do
-      {
-        :source_language => :klingon,
-        :target_languages => :lolcode,
-        :individual_translations => {:klingon => klingon, :lolcode => lolcode}
-      }
-    end
-
     let(:klingon_as_aggregate) do
       {
         "spec/fixtures/" => {
@@ -48,12 +39,24 @@ describe Langulator::Aggregate do
       }
     end
 
+    let(:outfile) { 'spec/fixtures/output.yml' }
+
+    let(:compile_options) do
+      {
+        :source_language => :klingon,
+        :target_languages => :lolcode,
+        :individual_translations => {:klingon => klingon, :lolcode => lolcode},
+        :to => outfile
+      }
+    end
+
     subject { Langulator::Aggregate.new(compile_options) }
 
     its(:source_language) { should eq(:klingon) }
     its(:target_languages) { should eq([:lolcode]) }
     its(:languages) { should eq([:klingon, :lolcode]) }
     its(:individual_translations) { should eq({:klingon => klingon, :lolcode => lolcode}) }
+    its(:aggregate_file_path) { should eq(outfile) }
     its(:aggregate) { should eq(aggregate) }
 
     it "remappes the source language to initialize aggregate" do
@@ -62,6 +65,21 @@ describe Langulator::Aggregate do
 
     it "inserts a target language into the aggregate" do
       subject.insert(:lolcode, lolcode, klingon_as_aggregate).should eq(aggregate)
+    end
+
+    context "writing an aggregate" do
+      before(:each) do
+        FileUtils.rm(outfile) if File.exists? outfile
+      end
+
+      after(:each) do
+        FileUtils.rm(outfile) if File.exists? outfile
+      end
+
+      it "compiles" do
+        subject.compile
+        YAML.load(File.read(outfile)).should eq(aggregate)
+      end
     end
   end
 
@@ -80,7 +98,6 @@ describe Langulator::Aggregate do
       subject.extract(:english, input).should eq(expected_output)
     end
   end
-
 
   context "with aggregated data" do
     subject { Langulator::Aggregate.new(:aggregate_translations => aggregate, :languages => [:klingon, :lolcode]) }

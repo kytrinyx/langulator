@@ -4,7 +4,7 @@ module Langulator
     attr_reader :base_path, :languages
     def initialize(options = {})
       @base_path = options[:base_path]
-      @languages = options[:languages]
+      @languages = [options[:source_language]] + options[:target_languages]
     end
 
     def paths
