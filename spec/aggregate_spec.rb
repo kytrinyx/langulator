@@ -65,11 +65,11 @@ describe Langulator::Aggregate do
     end
 
     it "filters out the english" do
-      subject.separate[:english].should eq(english)
+      subject.individual_translations[:english].should eq(english)
     end
 
     it "filters out the french" do
-      subject.separate[:french].should eq(french)
+      subject.individual_translations[:french].should eq(french)
     end
   end
 end

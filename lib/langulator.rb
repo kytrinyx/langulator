@@ -19,15 +19,10 @@ module Langulator
       write filename, translations
     end
 
-    def separate(aggregate, options)
-      Aggregate.new(aggregate, options).separate
-    end
-
     def decompile(options)
-      aggregate = YAML.load(File.read(options[:from]))
-      translations = separate(aggregate, options)
+      aggregate = Aggregate.from_file(options[:from], :languages => options[:languages])
 
-      translations.each do |language, data|
+      aggregate.individual_translations.each do |language, data|
         data.each do |path, translation|
           filename = "#{path}#{language}.yml"
           write filename, translation
