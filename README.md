@@ -4,7 +4,7 @@ Manage your i18n.
 
 Or rather: compile it into a single managable file and give it to the translator, so you don't have to deal with it.
 
-For example, given that you've written the original translations in English and also need French and Norwegian versions, and that you have multiple paths that contain i18n yml files (`<language>.yml`, then this will give you a single output file where each key is listed with the translations immediately below it.
+For example, given that you've written the original translations in English and also need French and Norwegian versions, and that you have multiple paths that contain i18n yml files (`<language>.yml`), then this will give you a single output file where each key is listed with the translations immediately below it.
 
 If you have partial translations in the target languages, these will be included.
 
