@@ -67,6 +67,11 @@ describe Langulator::Aggregate do
       subject.insert(:lolcode, lolcode, klingon_as_aggregate).should eq(aggregate)
     end
 
+    it "loads an aggregate" do
+      subject = Langulator::Aggregate.from_file(:from => 'spec/fixtures/translations.yml', :languages => [:klingon, :lolcode])
+      subject.aggregate.should eq(aggregate)
+    end
+
     context "writing an aggregate" do
       before(:each) do
         FileUtils.rm(outfile) if File.exists? outfile

@@ -6,7 +6,7 @@ module Langulator
     class << self
       def from_file(options)
         translations = YAML.load(File.read(options[:from]))
-        new(:aggregate_translations => translations.merge(options))
+        new options.merge(:aggregate_translations => translations)
       end
 
       def from_files(options)

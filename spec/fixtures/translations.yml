@@ -1,0 +1,12 @@
+---
+spec/fixtures/:
+  words:
+    affirmative:
+      :klingon: HISlaH
+      :lolcode: YA RLY
+    negative:
+      :klingon: ghobe'
+      :lolcode: NO WAI
+    hello:
+      :klingon: nuqneH
+      :lolcode: O HAI
