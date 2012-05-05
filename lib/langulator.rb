@@ -24,7 +24,7 @@ module Langulator
     end
 
     def decompile(options)
-      aggregate = YAML.load(File.read(options[:file]))
+      aggregate = YAML.load(File.read(options[:from]))
       translations = separate(aggregate, options)
 
       translations.each do |language, data|
