@@ -40,18 +40,14 @@ Or install it yourself as:
 
     $ gem install langulator
 
-### Compile
-
-* `decompile` from an aggregate file (`separate` into final data structures), write to files
-
-    load -> combine into aggregate -> write :to => file
-    load :from => file -> separate from aggregate -> write
 
 ## Usage
 
 ### Compile
 
-Compile from `.yml` files at given (wildcard) paths into an aggregate data structure, and write this to a file.
+* load individual translations
+* combine into aggregated translations
+* write to an aggregate file
 
     Langulator.compile(:original => 'en', :alternates => ['fr', 'no'], :base_path => '**/i18n/', :to => '/tmp/translations.yml')
 
@@ -97,12 +93,13 @@ Outputs:
               fr: 
               no: 
 
-
 ### Decompile
 
-Decompile from a single aggregate `.yml` file, writing the separate translation files to their original locations.
+* load an aggregate file
+* separate into individual translations
+* write to individual translation files
 
-    Langulator.decompile(:file => './tmp/translations.yml', :languages => ['en', 'fr', 'no'])
+    Langulator.decompile(:from => './tmp/translations.yml', :languages => ['en', 'fr', 'no'])
 
 Input:
 
@@ -157,7 +154,6 @@ Output:
 
 ## TODO
 
-* refactor to use a core `Aggregate` class rather than the rather arbitrary classes currently in use.
 * handle yml files that are namespaced by the language, e.g.
 ```
 ---
