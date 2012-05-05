@@ -49,7 +49,7 @@ describe Langulator::Aggregate do
     }
   end
 
-  context "with tangled data" do
+  context "with aggregated data" do
     subject { Langulator::Aggregate.new(aggregate, :languages => [:english, :french]) }
 
     it 'extracts English' do
@@ -65,11 +65,11 @@ describe Langulator::Aggregate do
     end
 
     it "filters out the english" do
-      subject.untangle[:english].should eq(english)
+      subject.separate[:english].should eq(english)
     end
 
     it "filters out the french" do
-      subject.untangle[:french].should eq(french)
+      subject.separate[:french].should eq(french)
     end
   end
 end

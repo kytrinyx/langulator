@@ -19,14 +19,14 @@ module Langulator
       write filename, translations
     end
 
-    def untangle(aggregate, options)
-      Aggregate.new(aggregate, options).untangle
+    def separate(aggregate, options)
+      Aggregate.new(aggregate, options).separate
     end
 
     def decompile(options)
       puts options[:file].inspect
       aggregate = YAML.load(File.read(options[:file]))
-      translations = untangle(aggregate, options)
+      translations = separate(aggregate, options)
 
       translations.each do |language, data|
         data.each do |path, translation|

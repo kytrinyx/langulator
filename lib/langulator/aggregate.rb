@@ -6,25 +6,25 @@ module Langulator
       @languages = options[:languages]
     end
 
-    def untangle
-      untangled = {}
+    def separate
+      separated = {}
       languages.each do |language|
-        untangled[language] = extract(language, aggregate)
+        separated[language] = extract(language, aggregate)
       end
-      untangled
+      separated
     end
 
     def extract(language, tangled)
-      untangled = {}
+      separated = {}
       tangled.keys.each do |key|
         values = tangled[key]
         if translations?(values)
-          untangled[key] = values[language]
+          separated[key] = values[language]
         else
-          untangled[key] = extract(language, values)
+          separated[key] = extract(language, values)
         end
       end
-      untangled
+      separated
     end
 
     def translations?(values)

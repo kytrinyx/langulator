@@ -54,7 +54,7 @@ describe Langulator do
     }
   end
 
-  it "untangles" do
+  it "separates an aggregate into individual translations" do
     expected = {
       "english" => {
         "spec/fixtures/" => {
@@ -81,7 +81,7 @@ describe Langulator do
         }
       }
     }
-    Langulator.untangle(aggregate_complete, :languages => ["english", "norsk", "francais"]).should eq(expected)
+    Langulator.separate(aggregate_complete, :languages => ["english", "norsk", "francais"]).should eq(expected)
   end
 
 end
