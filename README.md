@@ -20,7 +20,7 @@ If you need something other than US-ASCII, you may want to consider using ruby 1
 
 In 1.9.2 (patch 290):
 
-   S\xC3\xB8knadstekst
+    S\xC3\xB8knadstekst
 
 In 1.9.3:
 
