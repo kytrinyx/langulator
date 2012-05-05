@@ -21,60 +21,38 @@ describe Langulator::Aggregate do
 
   let(:aggregate) do
     {
-      :game => {
-        :rock => {
-          :english => "rock",
-          :french => "pierre",
-        },
-        :paper => {
-          :english => "paper",
-          :french => "papier"
-        },
-        :scissors => {
-          :english => "scissors",
-          :french => "ciseau"
-        },
-        :other => {
-          :deeply => {
-            :english => "nested",
-            :french => "imbriqué"
+      "spec/fixtures/" => {
+        "words" => {
+          "affirmative" => {
+            :klingon => "HISlaH",
+            :lolcode => "YA RLY"
+          },
+          "negative" => {
+            :klingon => "ghobe'",
+            :lolcode => "NO WAI"
+          },
+          "hello" => {
+            :klingon => "nuqneH",
+            :lolcode => "O HAI"
           }
         }
       }
     }
   end
 
-  let(:english) do
-    {
-      :game => {
-        :rock => "rock",
-        :paper => "paper",
-        :scissors => "scissors",
-        :other => {:deeply => "nested"}
-      }
-    }
-  end
-
-  let(:french) do
-    {
-      :game => {
-        :rock => "pierre",
-        :paper => "papier",
-        :scissors => "ciseau",
-        :other => {:deeply => "imbriqué"}
-      }
-    }
-  end
+  let(:klingon) { {"words" => {"affirmative" => "HISlaH", "negative" => "ghobe'", "hello" => "nuqneH"}} }
+  let(:lolcode) { {"words" => {"affirmative" => "YA RLY", "negative" => "NO WAI", "hello" => "O HAI"}} }
 
   context "with aggregated data" do
-    subject { Langulator::Aggregate.new(aggregate, :languages => [:english, :french]) }
+    subject { Langulator::Aggregate.new(aggregate, :languages => [:klingon, :lolcode]) }
 
-    it "filters out the english" do
-      subject.individual_translations[:english].should eq(english)
+    it "filters out the klingon" do
+      subject.individual_translations[:klingon].should eq("spec/fixtures/" => klingon)
     end
 
-    it "filters out the french" do
-      subject.individual_translations[:french].should eq(french)
+    it "filters out the lolcode" do
+      subject.individual_translations[:lolcode].should eq("spec/fixtures/" => lolcode)
     end
   end
+
 end
