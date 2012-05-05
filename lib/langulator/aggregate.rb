@@ -8,7 +8,7 @@ module Langulator
       end
     end
 
-    attr_reader :aggregate, :languages, :source_language, :target_languages
+    attr_reader :languages, :source_language, :target_languages
     def initialize(options = {})
       @aggregate = options[:aggregate_translations]
       @individual_translations = options[:individual_translations]
@@ -19,6 +19,10 @@ module Langulator
 
     def individual_translations
       @individual_translations ||= separate
+    end
+
+    def aggregate
+      @aggregate ||= combine
     end
 
     def extract(language, tangled)
@@ -43,6 +47,31 @@ module Langulator
       end
     end
 
+    # TODO: find a good name for this
+    def to_aggregate(language, translations)
+      dictionary = {}
+      translations.each do |key, value|
+        dictionary[key] ||= {}
+        if value.is_a?(Hash)
+          dictionary[key] = to_aggregate(language, value)
+        else
+          dictionary[key][language] = value
+        end
+      end
+      dictionary
+    end
+
+    def insert(language, translations, dictionary)
+      dictionary.dup.each do |key, value|
+        if value.is_a?(Hash)
+          insert(language, (translations || {})[key], value)
+        else
+          dictionary[language] = translations
+        end
+      end
+      dictionary
+    end
+
     private
 
     def translations?(values)
@@ -62,5 +91,22 @@ module Langulator
       end
       separated
     end
+
+    def combine
+      source_translations = individual_translations[source_language]
+
+      target_translations = {}
+      target_languages.each do |language|
+        target_translations[language] = individual_translations[language]
+      end
+
+      dictionary = to_aggregate(source_language, source_translations)
+      target_translations.each do |language, translations|
+        dictionary = insert(language, translations, dictionary)
+      end
+
+      dictionary
+    end
+
   end
 end

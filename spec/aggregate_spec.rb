@@ -3,40 +3,6 @@ require 'langulator/aggregate'
 
 describe Langulator::Aggregate do
 
-  describe "combining individual translations" do
-    let(:compile_options) do
-      {
-        :source_language => :klingon,
-        :target_languages => :lolcode,
-        :individual_translations => {:klingon => klingon, :lolcode => lolcode}
-      }
-    end
-
-    subject { Langulator::Aggregate.new(compile_options) }
-
-    its(:source_language) { should eq(:klingon) }
-    its(:target_languages) { should eq([:lolcode]) }
-    its(:languages) { should eq([:klingon, :lolcode]) }
-    its(:individual_translations) { should eq({:klingon => klingon, :lolcode => lolcode}) }
-    xit(:aggregate) { should eq(aggregate) }
-  end
-
-  describe "de-aggregating translations" do
-    subject { Langulator::Aggregate.new(:languages => [:english]) }
-
-    it 'extracts English' do
-      input = {:rock => {:english => "rock"}, :paper => {:english => "paper"}}
-      expected_output = {:rock => "rock", :paper => "paper"}
-      subject.extract(:english, input).should eq(expected_output)
-    end
-
-    it "extracts complicated English" do
-      input = {:a => {:really => {:deeply => {:nested => {:game => {:rock => {:english => "rock"}, :paper => {:english => "paper"}}}}}}}
-      expected_output = {:a => {:really => {:deeply => {:nested => {:game => {:rock => "rock", :paper => "paper"}}}}}}
-      subject.extract(:english, input).should eq(expected_output)
-    end
-  end
-
   let(:aggregate) do
     {
       "spec/fixtures/" => {
@@ -60,6 +26,61 @@ describe Langulator::Aggregate do
 
   let(:klingon) { {"spec/fixtures/" => {"words" => {"affirmative" => "HISlaH", "negative" => "ghobe'", "hello" => "nuqneH"}}} }
   let(:lolcode) { {"spec/fixtures/" => {"words" => {"affirmative" => "YA RLY", "negative" => "NO WAI", "hello" => "O HAI"}}} }
+
+  describe "combining individual translations" do
+    let(:compile_options) do
+      {
+        :source_language => :klingon,
+        :target_languages => :lolcode,
+        :individual_translations => {:klingon => klingon, :lolcode => lolcode}
+      }
+    end
+
+    let(:klingon_as_aggregate) do
+      {
+        "spec/fixtures/" => {
+          "words" => {
+            "affirmative" => { :klingon => "HISlaH" },
+            "negative" => { :klingon => "ghobe'" },
+            "hello" => { :klingon => "nuqneH" }
+          }
+        }
+      }
+    end
+
+    subject { Langulator::Aggregate.new(compile_options) }
+
+    its(:source_language) { should eq(:klingon) }
+    its(:target_languages) { should eq([:lolcode]) }
+    its(:languages) { should eq([:klingon, :lolcode]) }
+    its(:individual_translations) { should eq({:klingon => klingon, :lolcode => lolcode}) }
+    its(:aggregate) { should eq(aggregate) }
+
+    it "remappes the source language to initialize aggregate" do
+      subject.to_aggregate(:klingon, subject.individual_translations[:klingon]).should eq(klingon_as_aggregate)
+    end
+
+    it "inserts a target language into the aggregate" do
+      subject.insert(:lolcode, lolcode, klingon_as_aggregate).should eq(aggregate)
+    end
+  end
+
+  describe "de-aggregating translations" do
+    subject { Langulator::Aggregate.new(:languages => [:english]) }
+
+    it 'extracts English' do
+      input = {:rock => {:english => "rock"}, :paper => {:english => "paper"}}
+      expected_output = {:rock => "rock", :paper => "paper"}
+      subject.extract(:english, input).should eq(expected_output)
+    end
+
+    it "extracts complicated English" do
+      input = {:a => {:really => {:deeply => {:nested => {:game => {:rock => {:english => "rock"}, :paper => {:english => "paper"}}}}}}}
+      expected_output = {:a => {:really => {:deeply => {:nested => {:game => {:rock => "rock", :paper => "paper"}}}}}}
+      subject.extract(:english, input).should eq(expected_output)
+    end
+  end
+
 
   context "with aggregated data" do
     subject { Langulator::Aggregate.new(:aggregate_translations => aggregate, :languages => [:klingon, :lolcode]) }
