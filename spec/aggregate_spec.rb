@@ -2,6 +2,23 @@
 require 'langulator/aggregate'
 
 describe Langulator::Aggregate do
+
+  describe "de-aggregating translations" do
+    subject { Langulator::Aggregate.new({}, :languages => [:english]) }
+
+    it 'extracts English' do
+      input = {:rock => {:english => "rock"}, :paper => {:english => "paper"}}
+      expected_output = {:rock => "rock", :paper => "paper"}
+      subject.extract(:english, input).should eq(expected_output)
+    end
+
+    it "extracts complicated English" do
+      input = {:a => {:really => {:deeply => {:nested => {:game => {:rock => {:english => "rock"}, :paper => {:english => "paper"}}}}}}}
+      expected_output = {:a => {:really => {:deeply => {:nested => {:game => {:rock => "rock", :paper => "paper"}}}}}}
+      subject.extract(:english, input).should eq(expected_output)
+    end
+  end
+
   let(:aggregate) do
     {
       :game => {
@@ -51,18 +68,6 @@ describe Langulator::Aggregate do
 
   context "with aggregated data" do
     subject { Langulator::Aggregate.new(aggregate, :languages => [:english, :french]) }
-
-    it 'extracts English' do
-      input = {:rock => {:english => "rock"}, :paper => {:english => "paper"}}
-      expected_output = {:rock => "rock", :paper => "paper"}
-      subject.extract(:english, input).should eq(expected_output)
-    end
-
-    it "extracts complicated English" do
-      input = {:a => {:really => {:deeply => {:nested => {:game => {:rock => {:english => "rock"}, :paper => {:english => "paper"}}}}}}}
-      expected_output = {:a => {:really => {:deeply => {:nested => {:game => {:rock => "rock", :paper => "paper"}}}}}}
-      subject.extract(:english, input).should eq(expected_output)
-    end
 
     it "filters out the english" do
       subject.individual_translations[:english].should eq(english)
