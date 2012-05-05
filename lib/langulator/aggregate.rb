@@ -31,10 +31,25 @@ module Langulator
       separated
     end
 
+    def decompile
+      individual_translations.each do |language, translations|
+        translations.each do |path, translation|
+          filename = "#{path}#{language}.yml"
+          write filename, translation
+        end
+      end
+    end
+
     private
 
     def translations?(values)
       !values.keys.select {|key| languages.include?(key) }.empty?
+    end
+
+    def write(filename, content)
+      File.open(filename, 'w:utf-8') do |file|
+        file.write content.to_yaml
+      end
     end
 
     def separate

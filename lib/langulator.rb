@@ -20,14 +20,7 @@ module Langulator
     end
 
     def decompile(options)
-      aggregate = Aggregate.from_file(options[:from], :languages => options[:languages])
-
-      aggregate.individual_translations.each do |language, data|
-        data.each do |path, translation|
-          filename = "#{path}#{language}.yml"
-          write filename, translation
-        end
-      end
+      Aggregate.from_file(options[:from], :languages => options[:languages]).decompile
     end
 
     private

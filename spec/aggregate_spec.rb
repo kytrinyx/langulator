@@ -55,4 +55,26 @@ describe Langulator::Aggregate do
     end
   end
 
+  context "writing individual translations" do
+    let(:klingon_file) { "spec/fixtures/klingon.yml" }
+    let(:lolcode_file) { "spec/fixtures/lolcode.yml" }
+
+    subject { Langulator::Aggregate.new(aggregate, :languages => [:klingon, :lolcode]) }
+
+    before(:each) do
+      FileUtils.rm(klingon_file) if File.exists? klingon_file
+      FileUtils.rm(lolcode_file) if File.exists? lolcode_file
+    end
+
+    after(:each) do
+      FileUtils.rm(klingon_file) if File.exists? klingon_file
+      FileUtils.rm(lolcode_file) if File.exists? lolcode_file
+    end
+
+    it "decompiles" do
+      subject.decompile
+      YAML.load(File.read(klingon_file)).should eq(klingon)
+      YAML.load(File.read(lolcode_file)).should eq(lolcode)
+    end
+  end
 end
