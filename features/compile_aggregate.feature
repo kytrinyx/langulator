@@ -5,9 +5,9 @@ where all the translations for a single key are grouped for easy translation.
 
   @outfile
   Scenario: Compile aggregate
-    Given a website in English, French, and Dutch
+    Given a website in English, French, and Norwegian
     And there is a translation file for English
     And there is an outdated translation file for French
-    And there is no translation file for Dutch
+    And there is no translation file for Norwegian
     When the aggregate file is compiled
     Then the output file collects the translation keys for easy translation
