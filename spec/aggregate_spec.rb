@@ -40,18 +40,18 @@ describe Langulator::Aggregate do
     }
   end
 
-  let(:klingon) { {"words" => {"affirmative" => "HISlaH", "negative" => "ghobe'", "hello" => "nuqneH"}} }
-  let(:lolcode) { {"words" => {"affirmative" => "YA RLY", "negative" => "NO WAI", "hello" => "O HAI"}} }
+  let(:klingon) { {"spec/fixtures/" => {"words" => {"affirmative" => "HISlaH", "negative" => "ghobe'", "hello" => "nuqneH"}}} }
+  let(:lolcode) { {"spec/fixtures/" => {"words" => {"affirmative" => "YA RLY", "negative" => "NO WAI", "hello" => "O HAI"}}} }
 
   context "with aggregated data" do
     subject { Langulator::Aggregate.new(:aggregate_translations => aggregate, :languages => [:klingon, :lolcode]) }
 
     it "filters out the klingon" do
-      subject.individual_translations[:klingon].should eq("spec/fixtures/" => klingon)
+      subject.individual_translations[:klingon].should eq(klingon)
     end
 
     it "filters out the lolcode" do
-      subject.individual_translations[:lolcode].should eq("spec/fixtures/" => lolcode)
+      subject.individual_translations[:lolcode].should eq(lolcode)
     end
   end
 
@@ -73,8 +73,8 @@ describe Langulator::Aggregate do
 
     it "decompiles" do
       subject.decompile
-      YAML.load(File.read(klingon_file)).should eq(klingon)
-      YAML.load(File.read(lolcode_file)).should eq(lolcode)
+      YAML.load(File.read(klingon_file)).should eq(klingon["spec/fixtures/"])
+      YAML.load(File.read(lolcode_file)).should eq(lolcode["spec/fixtures/"])
     end
   end
 end
