@@ -4,7 +4,7 @@ require 'langulator/aggregate'
 describe Langulator::Aggregate do
 
   describe "de-aggregating translations" do
-    subject { Langulator::Aggregate.new({}, :languages => [:english]) }
+    subject { Langulator::Aggregate.new(:languages => [:english]) }
 
     it 'extracts English' do
       input = {:rock => {:english => "rock"}, :paper => {:english => "paper"}}
@@ -44,7 +44,7 @@ describe Langulator::Aggregate do
   let(:lolcode) { {"words" => {"affirmative" => "YA RLY", "negative" => "NO WAI", "hello" => "O HAI"}} }
 
   context "with aggregated data" do
-    subject { Langulator::Aggregate.new(aggregate, :languages => [:klingon, :lolcode]) }
+    subject { Langulator::Aggregate.new(:aggregate_translations => aggregate, :languages => [:klingon, :lolcode]) }
 
     it "filters out the klingon" do
       subject.individual_translations[:klingon].should eq("spec/fixtures/" => klingon)
@@ -59,7 +59,7 @@ describe Langulator::Aggregate do
     let(:klingon_file) { "spec/fixtures/klingon.yml" }
     let(:lolcode_file) { "spec/fixtures/lolcode.yml" }
 
-    subject { Langulator::Aggregate.new(aggregate, :languages => [:klingon, :lolcode]) }
+    subject { Langulator::Aggregate.new(:aggregate_translations => aggregate, :languages => [:klingon, :lolcode]) }
 
     before(:each) do
       FileUtils.rm(klingon_file) if File.exists? klingon_file

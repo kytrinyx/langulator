@@ -3,14 +3,14 @@ module Langulator
 
     class << self
       def from_file(filename, options)
-        aggregate_translations = YAML.load(File.read(filename))
-        new(aggregate_translations, options)
+        translations = YAML.load(File.read(filename))
+        new(:aggregate_translations => translations.merge(options))
       end
     end
 
     attr_reader :aggregate, :languages
-    def initialize(aggregate, options = {})
-      @aggregate = aggregate
+    def initialize(options = {})
+      @aggregate = options[:aggregate_translations]
       @languages = options[:languages]
     end
 
