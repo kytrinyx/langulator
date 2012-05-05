@@ -4,12 +4,12 @@ module Langulator
   class Aggregate
 
     class << self
-      def from_file(options)
+      def from_aggregate_file(options)
         translations = YAML.load(File.read(options[:from]))
         new options.merge(:aggregate_translations => translations)
       end
 
-      def from_files(options)
+      def from_individual_files(options)
         loader = Loader.new(options)
         new options.merge(:individual_translations => loader.translations)
       end

@@ -6,11 +6,11 @@ module Langulator
 
   class << self
     def compile(options)
-      Aggregate.from_files(options).compile
+      Aggregate.from_individual_files(options).compile
     end
 
     def decompile(options)
-      Aggregate.from_file(options).decompile
+      Aggregate.from_aggregate_file(options).decompile
     end
   end
 

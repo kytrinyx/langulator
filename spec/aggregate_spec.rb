@@ -68,7 +68,7 @@ describe Langulator::Aggregate do
     end
 
     it "loads an aggregate" do
-      subject = Langulator::Aggregate.from_file(:from => 'spec/fixtures/translations.yml', :languages => [:klingon, :lolcode])
+      subject = Langulator::Aggregate.from_aggregate_file(:from => 'spec/fixtures/translations.yml', :languages => [:klingon, :lolcode])
       subject.aggregate.should eq(aggregate)
     end
 
