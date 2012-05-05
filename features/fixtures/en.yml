@@ -1,0 +1,8 @@
+---
+food:
+  breakfast: yoghurt
+  lunch: sandwich
+  dinner:
+    main_course: steak
+    side: baked potato
+    desert: chocolate mousse

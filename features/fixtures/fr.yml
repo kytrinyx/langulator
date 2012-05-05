@@ -1,0 +1,10 @@
+---
+food:
+  breakfast: yaourt
+  lunch: sandwich
+  dinner:
+    main_course: biffteak
+    side: 
+    desert: mousse au chocolat
+  thanks: merci
+
