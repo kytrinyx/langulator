@@ -10,7 +10,7 @@ module Langulator
 
   class << self
     def compile(options)
-      Aggregate.from_individual_files(options).compile
+      IndividualTranslations.new(options).compile
     end
 
     def decompile(options)

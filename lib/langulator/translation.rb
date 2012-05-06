@@ -22,7 +22,14 @@ module Langulator
     end
 
     def translations
-      @translations ||= YAML.load(File.read(location))
+      unless @translations
+        begin
+          @translations = YAML.load(File.read(location))
+        rescue Errno::ENOENT => e
+          @translations = {}
+        end
+      end
+      @translations
     end
 
     def write

@@ -21,6 +21,13 @@ describe Langulator::Translation do
     its(:filename) { should eq('whatever.yml') }
   end
 
+  describe 'with a missing file' do
+    subject { Langulator::Translation.new(:location => 'spec/fixtures/does_not_exist.yml') }
+    its(:path) { should eq('spec/fixtures/') }
+    its(:filename) { should eq('does_not_exist.yml') }
+    its(:translations) { should eq({}) }
+  end
+
   describe "with a path and base filename" do
     subject { Langulator::Translation.new(:path => 'spec/fixtures/', :base_filename => 'whatever') }
     its(:path) { should eq('spec/fixtures/') }

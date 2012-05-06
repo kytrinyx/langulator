@@ -21,16 +21,60 @@ module Langulator
       return detected
     end
 
+    def combine
+      @translations = initialize_aggregate
+
+      individual_translations.target_translations.each do |i18n|
+        @translations[i18n.path] = insert(i18n.language, i18n.translations, @translations[i18n.path])
+      end
+    end
+
+    def insert(language, source, target)
+      target.dup.each do |key, value|
+        if value.is_a?(Hash)
+          insert(language, (source || {})[key], value)
+        else
+          target[language] = source
+        end
+      end
+      target
+    end
+
+    def initialize_aggregate
+      dict = {}
+      individual_translations.source_translations.each do |i18n|
+        dict[i18n.path] = remap(i18n.language, i18n.translations)
+      end
+      dict
+    end
+
+    def remap(language, source)
+      target = {}
+      source.each do |key, value|
+        target[key] ||= {}
+        if value.is_a?(Hash)
+          target[key] = remap(language, value)
+        else
+          target[key][language] = value
+        end
+      end
+      target
+    end
+
+    def individual_translations=(i18ns)
+      @individual_translations = i18ns
+    end
+
     def individual_translations
       unless @individual_translations
-        collection = IndividualTranslations.new
+        i18ns = IndividualTranslations.new
         languages.each do |language|
           extracted = extract(language, translations)
           extracted.each do |path, values|
-            collection << IndividualTranslation.new(:path => path, :base_filename => language, :translations => values)
+            i18ns << IndividualTranslation.new(:path => path, :base_filename => language, :translations => values)
           end
         end
-        @individual_translations = collection
+        @individual_translations = i18ns
       end
       @individual_translations
     end
