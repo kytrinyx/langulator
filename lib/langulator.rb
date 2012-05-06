@@ -1,6 +1,5 @@
 # encoding: utf-8
 require 'yaml'
-require 'langulator/aggregate'
 require 'langulator/translation'
 require 'langulator/aggregate_translation'
 require 'langulator/individual_translation'
