@@ -1,3 +1,4 @@
+require 'yaml'
 require 'langulator/translation'
 require 'translation_interface'
 

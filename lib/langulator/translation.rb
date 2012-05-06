@@ -1,5 +1,3 @@
-require 'yaml'
-
 module Langulator
   class Translation
 
@@ -24,12 +22,16 @@ module Langulator
     def translations
       unless @translations
         begin
-          @translations = YAML.load(File.read(location))
+          @translations = read
         rescue Errno::ENOENT => e
           @translations = {}
         end
       end
       @translations
+    end
+
+    def read
+      YAML.load(File.read(location))
     end
 
     def write
