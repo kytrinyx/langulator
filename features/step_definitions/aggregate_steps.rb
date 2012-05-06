@@ -20,6 +20,9 @@ When /the aggregate file is compiled/ do
 end
 
 When /^the aggregate file is decompiled$/ do
+  # Using full language name rather than the iso-code to avoid
+  # overwriting the individual files used for input in the compile feature.
+  # Ideally I should just use different languages, but I don't speak any others.
   Langulator.decompile(:languages => [:english, :francais, :norsk], :from => INFILE)
 end
 
