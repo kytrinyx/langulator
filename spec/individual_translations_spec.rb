@@ -19,6 +19,11 @@ describe Langulator::IndividualTranslations do
       subject << french2
     end
 
+    it "can accumulate many at a time" do
+      subject << [stub(:language => :nl), stub(:language => :cz)]
+      subject.map(&:language).uniq.should eq([:en, :fr, :nl, :cz])
+    end
+
     it "can iterate through them" do
       subject.map(&:language).should eq([:en, :en, :fr, :fr])
     end

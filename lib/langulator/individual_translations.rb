@@ -18,9 +18,11 @@ module Langulator
       aggregate.write
     end
 
-    def <<(obj)
+    def <<(*objects)
       @translations ||= []
-      translations << obj
+      objects.flatten.each do |obj|
+        translations << obj
+      end
     end
 
     def in(*languages)

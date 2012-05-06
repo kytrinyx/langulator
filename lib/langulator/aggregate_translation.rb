@@ -1,6 +1,8 @@
 module Langulator
   class AggregateTranslation < Translation
 
+    attr_writer :individual_translations
+
     def languages
       @languages ||= detect_languages
     end
@@ -9,22 +11,24 @@ module Langulator
       individual_translations.each(&:write)
     end
 
-    def individual_translations=(i18ns)
-      @individual_translations = i18ns
+    def individual_translations
+      @individual_translations ||= extract_individual_translations
     end
 
-    def individual_translations
-      unless @individual_translations
-        i18ns = IndividualTranslations.new
-        languages.each do |language|
-          extracted = extract(language, translations)
-          extracted.each do |path, values|
-            i18ns << IndividualTranslation.new(:path => path, :base_filename => language, :translations => values)
-          end
-        end
-        @individual_translations = i18ns
+    private
+
+    def extract_individual_translations
+      i18ns = IndividualTranslations.new
+      languages.each do |language|
+        i18ns << extract_translations(language)
       end
-      @individual_translations
+      i18ns
+    end
+
+    def extract_translations(language)
+      extract(language, translations).map do |path, values|
+        IndividualTranslation.new(:path => path, :base_filename => language, :translations => values)
+      end
     end
 
     def extract(language, aggregate)
@@ -39,8 +43,6 @@ module Langulator
       end
       separated
     end
-
-    private
 
     def translations?(values)
       !values.keys.select {|key| languages.include?(key) }.empty?
