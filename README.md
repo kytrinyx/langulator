@@ -103,7 +103,7 @@ Outputs:
 
 
 ```
-Langulator.decompile(:from => './tmp/translations.yml', :languages => [:en, :fr, :no])
+Langulator.decompile(:from => './tmp/translations.yml')
 ```
 
 Input:
