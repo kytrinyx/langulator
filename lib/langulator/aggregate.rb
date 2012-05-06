@@ -15,7 +15,7 @@ module Langulator
       end
     end
 
-    attr_reader :languages, :source_language, :target_languages, :aggregate_file_path
+    attr_reader :languages, :source_language, :target_languages, :aggregate_file_path, :individual_translations
     def initialize(options = {})
       @aggregate_file_path = options[:to]
       @aggregate = options[:aggregate_translations]
@@ -72,44 +72,6 @@ module Langulator
         end
       end
       dictionary
-    end
-
-    def decompile
-      individual_translations.each do |language, translations|
-        translations.each do |path, translation|
-          filename = "#{path}#{language}.yml"
-          write filename, translation
-        end
-      end
-    end
-
-    def individual_translations
-      @individual_translations ||= separate
-    end
-
-    def separate
-      separated = {}
-      languages.each do |language|
-        separated[language] = extract(language, aggregate)
-      end
-      separated
-    end
-
-    def extract(language, tangled)
-      separated = {}
-      tangled.keys.each do |key|
-        values = tangled[key]
-        if translations?(values)
-          separated[key] = values[language]
-        else
-          separated[key] = extract(language, values)
-        end
-      end
-      separated
-    end
-
-    def translations?(values)
-      !values.keys.select {|key| languages.include?(key) }.empty?
     end
 
     def write(filename, content)

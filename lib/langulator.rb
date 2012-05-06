@@ -1,6 +1,10 @@
 # encoding: utf-8
 require 'yaml'
 require 'langulator/aggregate'
+require 'langulator/translation'
+require 'langulator/aggregate_translation'
+require 'langulator/individual_translation'
+require 'langulator/individual_translations'
 
 module Langulator
 
@@ -10,7 +14,7 @@ module Langulator
     end
 
     def decompile(options)
-      Aggregate.from_aggregate_file(options).decompile
+      AggregateTranslation.new(:location => options[:from]).decompile
     end
   end
 

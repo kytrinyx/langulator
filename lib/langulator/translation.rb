@@ -4,15 +4,13 @@ module Langulator
   class Translation
 
     attr_reader :location
-    def initialize(path_to_file = '', options = {})
-      @location = path_to_file
+    def initialize(options = {})
+      @path = options[:path]
+      if options[:base_filename]
+        @filename = "#{options[:base_filename]}.yml"
+      end
+      @location = options[:location] || "#{@path}#{@filename}"
       @translations = options[:translations]
-    end
-
-    def location=(s)
-      @path = nil
-      @filename = nil
-      @location = s
     end
 
     def path

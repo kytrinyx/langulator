@@ -4,7 +4,7 @@ require 'translation_interface'
 
 describe Langulator::IndividualTranslation do
 
-  subject { Langulator::IndividualTranslation.new('spec/fixtures/english.yml') }
+  subject { Langulator::IndividualTranslation.new(:location => 'spec/fixtures/english.yml') }
 
   it_behaves_like "a translation"
 
