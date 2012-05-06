@@ -51,6 +51,24 @@ module Langulator
 
     private
 
+    def load_translations
+      i18ns = []
+      [source_language, *target_languages].each do |language|
+        paths.each do |path|
+          i18ns << IndividualTranslation.new(:path => path, :base_filename => language)
+        end
+      end
+      i18ns
+    end
+
+    def paths
+      @paths ||= locations.map {|location| location.gsub("#{source_language}.yml", '')}
+    end
+
+    def locations
+      @locations ||= Dir.glob("#{base_path}#{source_language}.yml")
+    end
+
     def combine
       dictionary = initialize_aggregate
 
@@ -59,17 +77,6 @@ module Langulator
       end
 
       AggregateTranslation.new(:location => aggregate_location, :translations => dictionary)
-    end
-
-    def insert(language, source, target)
-      target.dup.each do |key, value|
-        if value.is_a?(Hash)
-          insert(language, (source || {})[key], value)
-        else
-          target[language] = source
-        end
-      end
-      target
     end
 
     def initialize_aggregate
@@ -93,22 +100,15 @@ module Langulator
       target
     end
 
-    def load_translations
-      i18ns = []
-      [source_language, *target_languages].each do |language|
-        paths.each do |path|
-          i18ns << IndividualTranslation.new(:path => path, :base_filename => language)
+    def insert(language, source, target)
+      target.dup.each do |key, value|
+        if value.is_a?(Hash)
+          insert(language, (source || {})[key], value)
+        else
+          target[language] = source
         end
       end
-      i18ns
-    end
-
-    def locations
-      @locations ||= Dir.glob("#{base_path}#{source_language}.yml")
-    end
-
-    def paths
-      @paths ||= locations.map {|location| location.gsub("#{source_language}.yml", '')}
+      target
     end
 
   end
