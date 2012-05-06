@@ -3,7 +3,7 @@ Feature: Aggregate individual translation files
 Combines any number of source translation files into a single file,
 where all the translations for a single key are grouped for easy translation.
 
-  @outfile
+  @compile
   Scenario: Compile aggregate
     Given a website in English, French, and Norwegian
     And there is a translation file for English

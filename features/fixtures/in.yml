@@ -1,0 +1,38 @@
+---
+features/fixtures/:
+  food:
+    breakfast:
+      :english: yoghurt
+      :norsk: joggurt
+      :francais: yaourt
+    lunch:
+      :english: sandwich
+      :norsk: smørbrød
+      :francais: sandwich
+    dinner:
+      main_course:
+        :english: steak
+        :norsk: steak
+        :francais: biffteak
+      side:
+        :english: baked potato
+        :norsk: bakt potet
+        :francais: pomme de terre au four
+      desert:
+        :english: chocolate mousse
+        :norsk: sjokolademousse
+        :francais: mousse au chocolat
+features/fixtures/lang/:
+  volume:
+    sound:
+      :english: loud
+      :norsk: høyt
+      :francais: haut
+    liquid:
+      :english: full
+      :norsk: fullt
+      :francais: plein
+    hair:
+      :english: because I'm worth it
+      :norsk: for det er jeg verdt
+      :francais: parce que je le vaux bien

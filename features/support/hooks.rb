@@ -1,7 +1,20 @@
-Before('@outfile') do
-  FileUtils.rm(OUTFILE) if File.exists? OUTFILE
+def cleanup(file)
+  FileUtils.rm(file) if File.exists? file
 end
 
-After('@outfile') do
-  FileUtils.rm(OUTFILE) if File.exists? OUTFILE
+Before('@compile') do
+  cleanup AGGREGATE_FILE
+end
+
+After('@compile') do
+  cleanup AGGREGATE_FILE
+end
+
+Before('@decompile') do
+  INDIVIDUAL_FILES.each {|f| cleanup f}
+
+end
+
+After('@decompile') do
+  INDIVIDUAL_FILES.each {|f| cleanup f}
 end
