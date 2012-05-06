@@ -14,6 +14,15 @@ module Langulator
       translations.each { |translation| yield translation }
     end
 
+    def compile
+      aggregate.write
+    end
+
+    def <<(obj)
+      @translations ||= []
+      translations << obj
+    end
+
     def in(*languages)
       select {|translation| languages.include?(translation.language)}
     end
@@ -31,28 +40,65 @@ module Langulator
     end
 
     def translations
-      unless @translations
-        @translations = []
-        [source_language, *target_languages].each do |language|
-          paths.each do |path|
-            @translations << IndividualTranslation.new(:path => path, :base_filename => language)
-          end
-        end
-      end
-      @translations
+      @translations ||= load_translations
     end
 
     def aggregate
-      unless @aggregate
-        @aggregate = AggregateTranslation.new(:location => aggregate_location)
-        @aggregate.individual_translations = self
-        @aggregate.combine
-      end
-      @aggregate
+      @aggregate ||= combine
     end
 
-    def compile
-      aggregate.write
+    private
+
+    def combine
+      dictionary = initialize_aggregate
+
+      target_translations.each do |i18n|
+        dictionary[i18n.path] = insert(i18n.language, i18n.translations, dictionary[i18n.path])
+      end
+
+      AggregateTranslation.new(:location => aggregate_location, :translations => dictionary)
+    end
+
+    def insert(language, source, target)
+      target.dup.each do |key, value|
+        if value.is_a?(Hash)
+          insert(language, (source || {})[key], value)
+        else
+          target[language] = source
+        end
+      end
+      target
+    end
+
+    def initialize_aggregate
+      dict = {}
+      source_translations.each do |i18n|
+        dict[i18n.path] = remap(i18n.language, i18n.translations)
+      end
+      dict
+    end
+
+    def remap(language, source)
+      target = {}
+      source.each do |key, value|
+        target[key] ||= {}
+        if value.is_a?(Hash)
+          target[key] = remap(language, value)
+        else
+          target[key][language] = value
+        end
+      end
+      target
+    end
+
+    def load_translations
+      i18ns = []
+      [source_language, *target_languages].each do |language|
+        paths.each do |path|
+          i18ns << IndividualTranslation.new(:path => path, :base_filename => language)
+        end
+      end
+      i18ns
     end
 
     def locations
@@ -63,9 +109,5 @@ module Langulator
       @paths ||= locations.map {|location| location.gsub("#{source_language}.yml", '')}
     end
 
-    def <<(obj)
-      @translations ||= []
-      translations << obj
-    end
   end
 end

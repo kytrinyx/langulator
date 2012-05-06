@@ -42,17 +42,4 @@ describe Langulator::AggregateTranslation do
     Langulator::IndividualTranslation.new(:location => "spec/fixtures/lolcode.yml", :translations => dictionary)
   end
 
-  it "combines" do
-    translations = Langulator::IndividualTranslations.new(:source_language => :klingon, :target_languages => [:lolcode])
-    translations << klingon
-    translations << lolcode
-
-    aggregate = Langulator::AggregateTranslation.new
-    aggregate.individual_translations = translations
-    aggregate.combine
-    aggregate.translations.should eq(combined)
-  end
-
-
-
 end
