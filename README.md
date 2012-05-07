@@ -43,7 +43,9 @@ Or install it yourself as:
 
 ## Usage
 
-### Compile
+### In Ruby
+
+#### Compile
 
 * load individual translations
 * combine into aggregated translations
@@ -95,7 +97,7 @@ Outputs:
               fr: 
               no: 
 
-### Decompile
+#### Decompile
 
 * load an aggregate file
 * separate into individual translations
@@ -156,6 +158,28 @@ Output:
       dinner:
         main_course: Steak
         desert: Sjokolademousse
+
+### CLI
+
+```
+$~: langulator help
+
+$~: langulator help compile
+
+$~: langulator help decompile
+```
+
+#### Compile
+
+```
+$~: langulator compile -s en -t fr nb-no -p 'config/locales/**/' -f ./tmp/translations.yml
+```
+
+#### Decompile
+
+```
+$~: langulator decompile -f ./tmp/translations.yml
+```
 
 ## TODO
 
